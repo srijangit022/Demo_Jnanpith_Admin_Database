@@ -30,7 +30,9 @@ app.include_router(analytics)
 app.include_router(owner)
 
 # Serve the frontend statically
-frontend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)),"frontend")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+frontend_path = os.path.join(BASE_DIR, "frontend")
+
 app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 
