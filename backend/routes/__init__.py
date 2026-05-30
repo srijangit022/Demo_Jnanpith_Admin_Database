@@ -1,0 +1,9 @@
+from .students import router as students
+from .employees import router as employees
+from .dashboard import router as dashboard
+from .holidays import router as holidays
+from .vendors import router as vendors
+from .classes import router as classes
+from .attendance import router as attendance
+from .analytics import router as analytics
+from .owner import router as owner

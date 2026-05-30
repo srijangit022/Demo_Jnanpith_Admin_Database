@@ -1,0 +1,58 @@
+Jnanpith Shikshayatan Database System Architecture Overview
+This document provides a highly detailed walkthrough of the workflow, logic, and component architecture representing the school's administrative software.
+
+1. High-Level Architecture
+This software follows a Client-Server Architecture operating as a Single Page Application (SPA).
+* Frontend Layer: Built using vanilla HTML5, CSS3, and JavaScript. The frontend dynamically manipulates the DOM to provide a seamless application experience without full-page reloads. It communicates with the backend asynchronously using the browser's native fetch API.
+* Backend Layer: Powered by FastAPI (Python). It is responsible for handling business logic, authenticating requests, validating data structures using Pydantic, and managing database connections.
+* Database Layer: Powered by SQLite via SQLAlchemy (an Object Relational Mapper). This allows Python classes to directly map to SQL database tables without writing raw SQL queries.
+
+2. Security & Authentication Workflow
+The system employs a dual-layer, client-side authentication model designed to restrict access depending on user clearance.
+1. Global Site Password: Upon loading index.html, the entire UI is hidden within an app-container with display: none;. app.js triggers a modal asking for the global password. If matched (Jnanpith@1985), a sessionStorage token is set, removing the lock and rendering the Dashboard.
+2. Administrative Access Locking: Any attempt to navigate to highly sensitive views (Employees, Vendors, Analytics, or Owner's Dashboard) intercepts the view-switch event and prompts an Admin password modal. Only after matching the master string (Jnanpith@dmin123) does the page transit gracefully into the restricted view.
+
+3. Database Schema Mapping
+All structural persistence occurs through SQLAlchemy models dynamically translated to SQLite tables in school.db.
+1. Student: Central table storing profiles (name, DOB), contact, and extensive financial timelines (admission fees, monthly fee payments tracked across 12 distinct column fields fee_paid_jan through fee_paid_dec).
+2. Employee: Staff details including designation, blood group, base salary, and parallel 12-month trackers (salary_paid_jan...dec).
+3. Vendor (Defined modularly in vendors.py): Supplier profiles storing loan EMIs, supply order timelines, and payment histories across 12 monthly columns alongside aggregated due variables.
+4. Holiday: Simple model for managing long weekends and vacations via start_date and end_date ranges.
+5. StudentAttendance: Associated back to the Student table via Foreign Key relationship, tracking daily instances of "Present", "Absent", or "Late".
+
+4. Backend Routing & API Connections (FastAPI)
+The backend routes are modularized using FastAPI's APIRouter to maintain clean separations of concern.
+* /students (routes/students.py): CRUD operations for total student tracking.
+* /employees (routes/employees.py): CRUD and Photo upload logic, tracking staff records. Includes an /export pipeline.
+* /vendors (routes/vendors.py): Identical CRUD operations specifically to monitor external school vendors.
+* /api/dashboard (routes/dashboard.py): Generates "live" data. It aggregates birthdays hitting the current system date, checks for impending holidays, and retrieves summarized attendance of the day.
+* /attendance (routes/attendance.py): Processes massive batches of student attendance submitted via the user interface.
+* /holidays (routes/holidays.py): Holiday lifecycle commands.
+* /analytics (routes/analytics.py): Runs database aggregate functions (func.count, sums) compiling revenue versus expenditures pipelines formatted perfectly for Chart.js.
+* /owner (routes/owner.py): Advanced aggregation logic querying across all tables specifically yielding an Executive Summary (14 vital parameters) calculating true net liquidity and pending liabilities safely.
+
+5. Frontend Modular Design & Workflow
+The SPA is broken down into separate JavaScript files to prevent a monolith app.js. Each JS file follows a self-executing injection pattern.
+index.html (The Shell)
+Contains the Sidebar <nav> and the Main Content area <main>. The content area holds multiple <div>s with the class view-container. CSS ensures only the container active within app.js is set to display: block.
+app.js (The Controller)
+* Initialization (init): Boots the digital clock, registers event listeners, and intercepts global logins.
+* Data Hydration (loadData): Simultaneously fires parallel async asynchronous fetch calls across API endpoints (fetchStudents, fetchEmployees, fetchBirthdays).
+* View Router (switchView): The logic core validating security constraints before toggling off the DOM class hidden on a target view (e.g., dashboard-view -> employees-view).
+vendors.js / analytics.js / owner_dashboard.js (The Plugins)
+These scripts emulate a plugin architecture. Upon script load, they dynamically build DOM elements (document.createElement) and inject their own navigation links directly into the Sidebar via .appendChild().
+* They attach their dedicated <div class="view-container"> into the DOM.
+* They override the window.app._performSwitchView safely using Monkey Patching to instruct the main router to recognize their newly introduced tabs.
+* Workflow Example (owner_dashboard.js):
+1. User clicks "Owner's Dashboard" -> triggers switchView('owner').
+2. app.js catches it, flags the security protocol, requesting Admin Password.
+3. Authorized? The patched Router executes, stripping .hidden from the injected Owner view.
+4. The plugin intercepts the viewing state and immediately calls window.app.fetchOwnerStats(), pinging GET /owner/stats.
+5. The JSON response populates the DOM grid via renderOwnerStats().
+attendance.js & classes.js
+These extend specialized table processing. They rely on querying <select> dropdowns (Grade filters) and fetching class-specific students from the global window.app.students array array caching to build interactive attendance sheets or render CSV exports directly utilizing Blob mechanics entirely client-side.
+
+6. Logic Highlights
+* Financial Calculation Workflow: Instead of relational "Payment" tables requiring extensive complex JOIN operations, this architecture leans on pre-defined column tracking (fee_paid_jan, fee_paid_feb). When calculations happen (e.g., inside /analytics/overview), the backend loops the raw integers across these 12 columns, factoring in admission_fees_due parameters mathematically, providing real-time Total Dues and Total Revenue.
+* Chart.js Processing: The backend Analytics router creates exact JSON list arrays (monthly_revenue: [0, 1000, 200...]) mapped exactly against a 1-to-12 timeline. When fetchAnalytics() executes, Chart.js binds to the HTML <canvas> ID and instantly renders visual trends without any client-side mathematical overhead.
+
