@@ -132,3 +132,247 @@ This provides role-based operational security.
 │      SQLite DB      │
 │ Persistent Storage  │
 └─────────────────────┘
+👨‍💻 Developed By
+
+Srijan Chatterjee
+
+A complete school administration platform focused on operational efficiency, transparency, and financial visibility.
+
+
+---
+
+# 2. PROJECT_EXPLANATION.md (For Recruiters / Portfolio)
+
+```markdown
+# Project Explanation
+## Jnanpith Shikshayatan Administrative Management System
+
+### Problem Statement
+
+Educational institutions often manage student records, employee data, fee collection, vendor payments, attendance, and financial reporting across multiple spreadsheets and manual processes.
+
+This creates:
+
+- Data inconsistency
+- Reporting delays
+- Human errors
+- Lack of centralized control
+
+To solve these challenges, I developed a centralized School Administration Management System.
+
+---
+
+## Objective
+
+To build a full-stack administrative platform capable of:
+
+- Managing students
+- Managing employees
+- Tracking attendance
+- Monitoring finances
+- Generating analytics
+- Providing executive-level reports
+
+within a single application.
+
+---
+
+## My Role
+
+I designed and developed:
+
+- Database architecture
+- Backend API development
+- Frontend SPA implementation
+- Authentication workflow
+- Financial analytics engine
+- Dashboard visualizations
+- Deployment configuration
+
+---
+
+## Technical Design
+
+### Frontend
+
+The frontend is implemented as a Single Page Application (SPA) using:
+
+- HTML5
+- CSS3
+- JavaScript
+
+The application dynamically updates content without page reloads using asynchronous Fetch API requests.
+
+---
+
+### Backend
+
+The backend is developed using FastAPI.
+
+Responsibilities include:
+
+- API handling
+- Data validation
+- Business logic
+- Authentication
+- Database communication
+
+---
+
+### Database
+
+SQLite is used as the database layer.
+
+SQLAlchemy ORM was implemented to:
+
+- Simplify database operations
+- Reduce SQL complexity
+- Improve maintainability
+
+---
+
+## Major Modules
+
+### Student Management
+
+Stores:
+
+- Personal Information
+- Admission Records
+- Contact Details
+- Monthly Fee Status
+
+---
+
+### Employee Management
+
+Stores:
+
+- Employee Information
+- Designation
+- Salary Structure
+- Salary Payment Status
+
+---
+
+### Vendor Management
+
+Tracks:
+
+- Suppliers
+- Payment Histories
+- Loan EMIs
+- Outstanding Dues
+
+---
+
+### Attendance Management
+
+Allows:
+
+- Daily Attendance
+- Class-wise Attendance
+- Attendance Reporting
+
+---
+
+### Analytics Dashboard
+
+Generates:
+
+- Revenue Analysis
+- Expense Analysis
+- Financial Trends
+- School Performance Metrics
+
+---
+
+### Owner Dashboard
+
+Executive dashboard that calculates:
+
+- Total Revenue
+- Total Expenses
+- Cash Flow
+- Net Liquidity
+- Pending Liabilities
+
+for strategic decision-making.
+
+---
+
+## Security Implementation
+
+The application implements two authentication layers:
+
+### Layer 1
+
+Global application access authentication.
+
+### Layer 2
+
+Administrative authorization for sensitive sections.
+
+This ensures restricted access to critical financial and management information.
+
+---
+
+## Challenges Faced
+
+### Challenge 1
+
+Managing multiple modules without creating a monolithic frontend.
+
+### Solution
+
+Implemented modular JavaScript architecture.
+
+---
+
+### Challenge 2
+
+Generating financial insights from large datasets.
+
+### Solution
+
+Created dedicated analytics APIs using aggregate functions and optimized calculations.
+
+---
+
+### Challenge 3
+
+Maintaining scalability.
+
+### Solution
+
+Separated business logic using FastAPI routers and SQLAlchemy models.
+
+---
+
+## Outcomes
+
+The system successfully centralizes:
+
+- School Administration
+- Attendance Monitoring
+- Financial Management
+- Executive Reporting
+
+into a single platform, improving operational efficiency and data visibility.
+
+---
+
+## Skills Demonstrated
+
+- Python
+- FastAPI
+- SQLAlchemy
+- SQLite
+- REST API Development
+- JavaScript
+- HTML/CSS
+- Authentication Systems
+- Database Design
+- Analytics Dashboards
+- Software Architecture
+- Full Stack Development
